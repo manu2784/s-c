@@ -1,6 +1,9 @@
 <?php // download data files from the source on the internet
 
-function fetchStocks($start_date, $end_date, $symbol,$path, $i) {
+
+function fetchStocks($start_date, $end_date, $symbol,$path, $i) 
+
+{
                        $opts = [
                         "http" => [
                             "method" => "GET",
@@ -10,30 +13,47 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i) {
                                 "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
                                 "Referer: https://www.nseindia.com/products/content/equities/equities/eq_security.htm\r\n".
                                 "X-Requested-With: XMLHttpRequest"
-                        ]
-                    ];
+                                  ]
+                               ];
 
-
+                   
 
                     $path=$path."/".$i.".html";
                     $context = stream_context_create($opts);
-                    $url="https://www.nseindia.com/products/dynaContent/common/productsSymbolMapping.jsp?symbol=".$symbol."&segmentLink=3&symbolCount=1&series=ALL&dateRange=&fromDate=".$start_date."&toDate=".$end_date."&dataType=PRICEVOLUMEDELIVERABLE";
+                    $symCount=file_get_contents("https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );  // get the symbolCount value for the stock to be used in the next http request as a parameter
+                    $symCount=(int)$symCount;
+                    $url="https://www.nseindia.com/products/dynaContent/common/productsSymbolMapping.jsp?symbol=".$symbol."&segmentLink=3&symbolCount=".$symCount."&series=ALL&dateRange=+&fromDate=".$start_date."&toDate=".$end_date."&dataType=PRICEVOLUMEDELIVERABLE";
 
 
                     $content=file_get_contents( $url, false, $context );
 
-                    if(!$content)
+                        $internalErrors = libxml_use_internal_errors(true);
+                        $doc = new DOMDocument();
+                        $doc->loadHTML($content);
+                        libxml_use_internal_errors($internalErrors);
+                        $node=$doc->getElementById('csvContentDiv');  // get the div containing csv values in the downloaded html
+                        $node=$node->nodeValue;
+
+                    if(!$content)               //http error
                         {
                             $error_code=$http_response_header[0];
-                            return $error_code;
+                            return array(false, $error_code, $url, $symbol,$start_date, $end_date);   //Error details
                         
-                        }   else if(file_put_contents($path, $content)!==false) 
+                        }  if(is_null($node))               // error in content
                             {
-                                
-                                return true;
-                               
-                            }
+
+                                $error_code="No content";
+                                return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
+
+                            } else if(file_put_contents($path, $content)!==false) 
+                                    {
+                                        
+                                      return array(true);
+                                       
+                                    }
 
 }
+
+
 
 ?>

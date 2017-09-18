@@ -14,13 +14,13 @@ $config= array("database"  => array(
 			   					   ),
 
 
-
 				);
 
 				
 
 define("DWNLSYM", realpath($_SERVER["DOCUMENT_ROOT"])."/downloads/symbol/"); // path where downloaded symbol data is saved
 define("DWNLSTCK", realpath($_SERVER["DOCUMENT_ROOT"])."/downloads/stocks/"); // path where downloaded stock data is saved
+define("ERRORLOG", realpath($_SERVER["DOCUMENT_ROOT"])."/downloads/log/");
 define("BASEDATE", "1 Jan 2017");                                             // Base date from when the stock data is to be downloaded
 define("DATA_INTERVAL", 90);                                                  // specifies parts durations when data downloaded in parts
 ?>
