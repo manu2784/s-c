@@ -11,13 +11,18 @@ if (!file_exists($update_dir)) {
 }
 
 // error variables
+$total_files_downloaded=0;
+$number_symbols=0;
+$number_symbols_used=0;
 $error_count=0;
-$error_log=array();
 $error_content="";
 $err_dir=ERRORLOG."/".date('d_m_y').".csv";
 
+
 // Get All symbols & create folder for each symbol/security
 $get_record = $conn->query("SELECT * FROM symbol");
+
+$number_symbols=mysqli_num_rows($get_record);
 
 while($row=$get_record->fetch_array())
  {
@@ -32,36 +37,68 @@ while($row=$get_record->fetch_array())
  	  }	
 
  	  $path=$update_dir."/".$security_name;
- 	  $error_rows=getAllStocks($symbol, $path);            // call function to get all html files for a symbol
 
- 	  if(count($error_rows)>0)                             // check for errors in getting html files
+ 	  $symbols_downloaded=getAllStocks($symbol, $path);            // call function to get all html files for a symbol
+
+ 	  if(count($symbols_downloaded)>0)                             // check for errors in getting html files
  	  	 {
- 	  	 	$error_count++;
- 	  	 		foreach ($error_rows as $error) 
+ 	  	 	
+ 	  	 		foreach ($symbols_downloaded as $sym) 
  	  	 		{
- 	  	 			$error_log['$symbol'][]=$error;
+ 	  	 			$download_record['$symbol'][]=$sym;
  	  	 			
  	  	 		}
 
  	  	 }
 
+ 	  	 $number_symbols_used++;
 
  }
-// Error Reporting and writing each errors to log files
 
 
-echo "Error Count= ".$error_count;
-
-foreach ($error_log as $err_sym) {
+// Retrieving individual download records and error if any 
+foreach ($download_record as $sym_record) {
 		
-	foreach ($err_sym as $error) {
-				$error_content.=$error[3].",".$error[1].",".$error[2]."\n";
+	foreach ($sym_record as $record) {
+					if($record[0])
+						{
+							$total_files_downloaded++;
+
+						} elseif (!$record[0]) {
+							$error_count++;
+							$error_content.=$record[3].",".$record[1].",".$record[2]."\n";
+						}			
+
 		}	
+
 
 }
 
+// writing to error log file
 $myfile = fopen( $err_dir, "w");
 fwrite($myfile, $error_content);
 fclose($myfile); 
 
+
+if($number_symbols==$number_symbols_used) {
+	$update_process="Complete!!";
+} else {
+	$update_process="Incomplete!";
+}
+
+echo "Error Count= ".$error_count."<br>"."Total No Symbol=".$number_symbols."<br>"
+."Number of Symbol Downloaded=".$number_symbols_used."<br>"
+."Total Files Downloaded=".$total_files_downloaded."<br>"."Update Process=".$update_process."<br>";
+
+
+
+
+
+
+
 ?>
+
+
+
+
+

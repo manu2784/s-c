@@ -18,17 +18,16 @@ function getAllStocks($symbol, $path) {
 
 
 
+
                     while (($days_fromstart- $intervel) > 0){
 
 
                                     
                                      $end_date= date('d-m-Y',strtotime($base_date.'+'. $intervel. 'days')); // create/increment end date
 
-                                     $get_file=fetchStocks($start_date, $end_date, $symbol, $path,$i);    //get file function
+                                     $get_file=fetchStocks($start_date, $end_date, $symbol, $path,$i);    //get file function                                     
+                                     $error_rows[$i]=$get_file;                                           // array containing any errors while downloading or parsing an html file
 
-                                             if(!$get_file[0]) {
-                                                $error_rows[$i]=$get_file;  // array containing any errors while downloading or parsing an html file
-                                             } 
 
                                     $start_date=date("d-m-Y", strtotime($base_date.'+'.($intervel+1).'days')); //increment start date
 
@@ -40,16 +39,14 @@ function getAllStocks($symbol, $path) {
 
                                             $intervel= $intervel + 90;
 
-                                            } else if ((($days_fromstart- $intervel)<90))   // last iteration or last date range fetch if days remaining are less than interval days
+                                            } else if ((($days_fromstart- $intervel)<90))                   // last iteration or last date range fetch if days remaining are less than interval days
                                                 {
                                                     	$intervel=$intervel+($days_fromstart- $intervel);
                                                     	$end_date= date('d-m-Y',strtotime($base_date.'+'. $intervel. 'days'));
                                                         $i++;
                                                         $get_file=fetchStocks($start_date, $end_date, $symbol, $path,$i);  //get file
-
-                                                         if(!$get_file[0]) {
-                                                            $error_rows[$i]=$get_file;
-                                                         } 
+                                                        $error_rows[$i]=$get_file;
+                                                       
 
                                                  }  
 
