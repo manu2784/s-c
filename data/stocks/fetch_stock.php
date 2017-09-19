@@ -18,7 +18,7 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
 
                    
 
-                    $path=$path."/".$i.".html";
+                    $path=$path."/".$i.".csv";
                     $context = stream_context_create($opts);
                     $symCount=file_get_contents("https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );  // get the symbolCount value for the stock to be used in the next http request as a parameter
                     $symCount=(int)$symCount;
@@ -31,8 +31,9 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                         $doc = new DOMDocument();
                         $doc->loadHTML($content);
                         libxml_use_internal_errors($internalErrors);
-                        $node=$doc->getElementById('csvContentDiv');  // get the div containing csv values in the downloaded html
+                        $node=$doc->getElementById('csvContentDiv');  // get the div containing csv values in the downloaded html or return
                         $node=$node->nodeValue;
+                        $node=is_null($node)?$node:str_replace(":", "\n", $node); 
 
                     if(!$content)               //http error
                         {
@@ -45,7 +46,7 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                                 $error_code="No content";
                                 return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
 
-                            } else if(file_put_contents($path, $content)!==false) 
+                            } else if(file_put_contents($path, $node)!==false) 
                                     {
                                         
                                       return array(true);
