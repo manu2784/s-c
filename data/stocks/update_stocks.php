@@ -1,4 +1,4 @@
-<?php 
+<?php ini_set('max_execution_time', 150);
 
 require_once ('../../config/config.php');
 require_once ('../../config/db_open.php');
@@ -12,7 +12,7 @@ if (!file_exists($update_dir)) {
 
 // error variables
 $total_files_downloaded=0;
-$number_symbols=0;
+$total_symbols=0;
 $number_symbols_used=0;
 $error_count=0;
 $error_content="";
@@ -22,7 +22,7 @@ $err_dir=ERRORLOG."/".date('d_m_y').".csv";
 // Get All symbols & create folder for each symbol/security
 $get_record = $conn->query("SELECT * FROM symbol");
 
-$number_symbols=mysqli_num_rows($get_record);
+$total_symbols=mysqli_num_rows($get_record);
 
 while($row=$get_record->fetch_array())
  {
@@ -79,16 +79,23 @@ $myfile = fopen( $err_dir, "w");
 fwrite($myfile, $error_content);
 fclose($myfile); 
 
+// Update Process status
+if($total_symbols==$number_symbols_used && $error_count>0) {
+	$update_process="Complete with Errors";
+} elseif ($total_symbols==$number_symbols_used && $error_count==0) 
+		{
+			$update_process="Complete With No Errors";
 
-if($number_symbols==$number_symbols_used) {
-	$update_process="Complete!!";
-} else {
-	$update_process="Incomplete!";
-}
+		} elseif ($total_symbols!=$number_symbols_used && $error_count>0)
+		  {
+		  		$update_process="Incomplete With Errors";
+		  } elseif ($total_symbols!=$number_symbols_used && $error_count>0)
+		     {
+		     	$update_process="Incomplete With No Errors";
+		     }
 
-echo "Error Count= ".$error_count."<br>"."Total No Symbol=".$number_symbols."<br>"
-."Number of Symbol Downloaded=".$number_symbols_used."<br>"
-."Total Files Downloaded=".$total_files_downloaded."<br>"."Update Process=".$update_process."<br>";
+echo "Total Files Downloaded= ".$total_files_downloaded."<br>"."Number of Errors= ".$error_count."<br>"."Total No Symbol=".$total_symbols."<br>"
+."Number of Symbol Downloaded=".$number_symbols_used."<br>"."Update Process=".$update_process."<br>";
 
 
 
