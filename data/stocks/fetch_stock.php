@@ -4,6 +4,8 @@
 function fetchStocks($start_date, $end_date, $symbol,$path, $i) 
 
 {
+
+                       $symbol= str_replace("&", "%26", $symbol); // find and replace ampersand in the stock symbol 
                        $opts = [
                         "http" => [
                             "method" => "GET",
@@ -35,23 +37,27 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                         $node=$node->nodeValue;
                         $node=is_null($node)?$node:str_replace(":", "\n", $node); 
 
-                    if(!$content)               //http error
+                    if(!$content)                                                                                       //http error
                         {
                             $error_code=$http_response_header[0];
-                            return array(false, $error_code, $url, $symbol,$start_date, $end_date);   //Error details
+                            return array(false, $error_code, $url, $symbol,$start_date, $end_date, $symCount);          
                         
-                        }  if(is_null($node))               // error in content
+                        } else if(is_null($node) && stripos($content,'No Records')!==false)                             // record doesn't for give data range
                             {
+                                 $error_code="No Records";
+                                 return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
 
-                                $error_code="No content";
-                                return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
+                            } else if (is_null($node))                                                                  // Required data doesn't exist in downloaded files    
+                                {
+                                    $error_code="No Data";
+                                    return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
 
-                            } else if(file_put_contents($path, $node)!==false) 
-                                    {
-                                        
-                                      return array(true);
-                                       
-                                    }
+                                } else if(file_put_contents($path, $node)!==false)                                       // writing downloaded content to local files
+                                        {
+                                            
+                                          return array(true);
+                                           
+                                        }
 
 }
 

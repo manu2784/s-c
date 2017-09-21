@@ -67,6 +67,7 @@ foreach ($download_record as $sym_record) {
 						} elseif (!$record[0]) {
 							$error_count++;
 							$error_content.=$record[3].",".$record[1].",".$record[2]."\n";
+							
 						}			
 
 		}	

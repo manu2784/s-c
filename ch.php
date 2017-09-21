@@ -2,7 +2,12 @@
 
 require_once('config/config.php');
 
-function fetchStocks($start_date, $end_date, $symbol,$path, $i) {
+
+function fetchStocks($start_date, $end_date, $symbol,$path, $i) 
+
+{
+
+                       $symbol= str_replace("&", "%26", $symbol); // find and replace ampersand in the stock symbol 
                        $opts = [
                         "http" => [
                             "method" => "GET",
@@ -12,14 +17,14 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i) {
                                 "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
                                 "Referer: https://www.nseindia.com/products/content/equities/equities/eq_security.htm\r\n".
                                 "X-Requested-With: XMLHttpRequest"
-                        ]
-                    ];
+                                  ]
+                               ];
 
                    
 
-                    $path=$path."/".$i.".html";
+                    $path=$path."/".$i.".csv";
                     $context = stream_context_create($opts);
-                    $symCount=file_get_contents( "https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );
+                    $symCount=file_get_contents("https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );  // get the symbolCount value for the stock to be used in the next http request as a parameter
                     $symCount=(int)$symCount;
                     $url="https://www.nseindia.com/products/dynaContent/common/productsSymbolMapping.jsp?symbol=".$symbol."&segmentLink=3&symbolCount=".$symCount."&series=ALL&dateRange=+&fromDate=".$start_date."&toDate=".$end_date."&dataType=PRICEVOLUMEDELIVERABLE";
 
@@ -30,26 +35,32 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i) {
                         $doc = new DOMDocument();
                         $doc->loadHTML($content);
                         libxml_use_internal_errors($internalErrors);
-                        $node=$doc->getElementById('csvContentDiv');
+                        $node=$doc->getElementById('csvContentDiv');  // get the div containing csv values in the downloaded html or return
                         $node=$node->nodeValue;
+                        $node=is_null($node)?$node:str_replace(":", "\n", $node); 
 
-                    if(!$content)
+
+                    if(!$content)               //http error
                         {
                             $error_code=$http_response_header[0];
-                            return array($error_code, false, $url, $symbol,$start_date, $end_date);
+                            return array(false, $error_code, $url, $symbol,$start_date, $end_date, $symCount);   //Error details
                         
-                        }  if(is_null($node)) 
+                        } else if(is_null($node) && stripos($content,'No Records')!==false)               // error in content
                             {
+                                 $error_code="No Records";
+                                 return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
 
-                                $error_code="no csv";
-                                return array($error_code, false, $url, $symbol,$start_date, $end_date, $symCount);
+                            } else if (is_null($node))
+                                {
+                                    $error_code="No Data";
+                                    return array(false,$error_code, $url, $symbol,$start_date, $end_date, $symCount);
 
-                            } else if(file_put_contents($path, $content)!==false) 
-                                    {
-                                        
-                                      return true;
-                                       
-                                    }
+                                } else if(file_put_contents($path, $node)!==false)                 // writing downloaded content to local files
+                                        {
+                                            
+                                          return array(true);
+                                           
+                                        }
 
 }
 
