@@ -29,15 +29,14 @@ foreach($retrieved_symbols as $record)
  {
  	$symbol=$record[1];
  	$security_name=$record[3];
- 	if(!mkdir($update_dir."/".$security_name, 0777, true)) // make directory for each symbol for current update
+ 	if(!file_exists($update_dir."/".$symbol)) // make directory for each symbol for current update
  	  {
  	  	
- 		$security_name=$record[3]."-".$record['series'];
- 		mkdir($update_dir."/".$security_name, 0777, true);    // if duplicate symbols are found, append series to security name and create folder 
+ 		mkdir($update_dir."/".$symbol, 0777, true);    // if duplicate symbols are found, append series to security name and create folder 
  		 
  	  }	
 
- 	  $path=$update_dir."/".$security_name;
+ 	  $path=$update_dir."/".$symbol;
 
  	  $symbols_downloaded=getAllStocks($symbol, $path);            // call function to get all html files for a symbol
 
