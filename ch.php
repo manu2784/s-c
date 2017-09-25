@@ -64,7 +64,7 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
 
 }
 
-$disco=fetchStocks('01-01-2017','30-03-2017','TATAMOTORS','test/',2);
+$disco=fetchStocks('01-01-2017','01-04-2017','BEL','test/',2);
 var_dump($disco);
 
 ?>
