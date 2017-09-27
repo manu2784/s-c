@@ -34,7 +34,7 @@ foreach($retrieved_symbols as $record)
  	  	
  		mkdir($update_dir."/".$symbol, 0777, true);    // if duplicate symbols are found, append series to security name and create folder 
  		 
- 	  }	
+ 	  }	 else { continue; }
 
  	  $path=$update_dir."/".$symbol;
 
