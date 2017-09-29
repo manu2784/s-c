@@ -1,6 +1,6 @@
 <?php
 
-function downloadErros($download_record, $number_symbols_used) {
+function downloadErros($download_record, $number_symbols_used, $total_symbols) {
 
 
 

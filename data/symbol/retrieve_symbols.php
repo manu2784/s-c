@@ -29,4 +29,5 @@ function retrieveSymbols($symbol="all")
 } 
 
 
+
 ?>

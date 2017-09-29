@@ -61,6 +61,4 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
 
 }
 
-
-
 ?>

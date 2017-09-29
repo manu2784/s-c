@@ -16,9 +16,6 @@ function getAllStocks($symbol, $path) {
 
 
 
-
-
-
                     while (($days_fromstart- $intervel) > 0){
 
 
@@ -34,12 +31,12 @@ function getAllStocks($symbol, $path) {
 
 
 
-                                    if (($days_fromstart- $intervel)>90) 
+                                    if (($days_fromstart- $intervel)>90)  //headache!!!!! code for all conditions
                                             {
 
                                             $intervel= $intervel + 90;
 
-                                            } else if ((($days_fromstart- $intervel)<90))                   // last iteration or last date range fetch if days remaining are less than interval days
+                                            } else if ((($days_fromstart- $intervel)<=90))                   // last iteration or last date range fetch if days remaining are less than interval days
                                                 {
                                                     	$intervel=$intervel+($days_fromstart- $intervel);
                                                     	$end_date= date('d-m-Y',strtotime($base_date.'+'. $intervel. 'days'));

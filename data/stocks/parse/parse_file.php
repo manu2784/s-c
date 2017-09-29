@@ -2,7 +2,7 @@
 
 
 require_once ('../../../config/config.php');
-require_once ('../../../config/db_open.php');
+require_once ('../../../config/db_open2.php');
 require_once ('../../symbol/retrieve_symbols.php');
 
 function parseFile($files) {
