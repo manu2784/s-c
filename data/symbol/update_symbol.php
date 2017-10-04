@@ -1,8 +1,10 @@
 <?php
-require_once ('../../config/config.php');
-require_once ('../../config/db_open.php');
-require_once ('fetch_symbol.php');
-require_once ('is_modified.php');
+$root=realpath($_SERVER["DOCUMENT_ROOT"]);
+
+require ( $root.'/config/config.php');
+require ( $root.'/config/db_open.php');
+require ('fetch_symbol.php');
+require ('is_modified.php');
 
 // --------------------------------------FETCH NEW SYMBOL DATA
 $url=$config['urls']['symbol'];

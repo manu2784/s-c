@@ -1,31 +1,52 @@
 <?php 
+$root=realpath($_SERVER["DOCUMENT_ROOT"]);
 
-require_once ('config/config.php');
-require_once ('config/db_open.php');
+require ( $root.'/config/config.php');
+require ( $root.'/config/db_open.php');
 
-function createStockTable($symbol){
 
-$query='CREATE TABLE TATAMOTORS LIKE stock_general';
-if($conn->query($query)== true) {
-	echo "table created";
-} else {
-	echo "failed to create table";
-}
+function isTableExist($symbol){
 
-$table_name=$symbol;
+global $conn;
+$table_name=$conn->real_escape_string($symbol);
 $result = $conn->query("SHOW TABLES LIKE '".$table_name."'");
 
 
-    if($result->num_rows == 1) {
-        echo "Table exists";
-    } elseif($result->num_rows == 0) {
-     echo "table Doesn't exist";
+    if($result->num_rows == 1) 
+    	{
+        	return true;
+
+    	} elseif($result->num_rows == 0) 
+	    	{
+	    		return false;
+
+			}
+
 }
 
+function createStockTable($symbol){
+
+global $conn;
+$table_name=$conn->real_escape_string($symbol);
+$query='CREATE TABLE '.$table_name.' LIKE stock_general';
+
+					if($conn->query($query)== true) {
+						return true;
+					} else {
+						return false;
+					}
 
 }
 
+if(isTableExist("YO'YO")) {
+	echo "Table Exist";
 
+} else if (!isTableExist("YO'YO")){
+	if(createStockTable("YO'YO")) echo "table Created";
+
+} else {
+	echo "Failed to Check and create table";
+}
 
 
 ?>
