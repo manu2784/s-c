@@ -10,16 +10,22 @@ function parseSymbol($symbol)
 
 
 					$filecount = 0;
-					$files = glob($dir_path . "*");
-					if ($files)
-					{
-					 	$filecount = count($files);
-					} else 
-					{
-						echo "data doesn't exist";
-					}
+					$files = glob($dir_path . "csv");
+					if (count($files)>0)
+						{
+						 	
+							foreach ($files as $file) {
+								$file_path=$dir_path.$file;
+								parseFile($file_path); 
+							}
 
-					parseFile($files); 
+						} else 
+							{
+								//echo "data doesn't exist";
+								return false;
+							}
+
+					
 
 }				
 

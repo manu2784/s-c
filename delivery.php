@@ -28,7 +28,8 @@ function createStockTable($symbol){
 
 global $conn;
 $table_name=$conn->real_escape_string($symbol);
-$query='CREATE TABLE '.$table_name.' LIKE stock_general';
+
+$query='CREATE TABLE `'.$table_name.'` LIKE stock_general';
 
 					if($conn->query($query)== true) {
 						return true;
@@ -36,16 +37,6 @@ $query='CREATE TABLE '.$table_name.' LIKE stock_general';
 						return false;
 					}
 
-}
-
-if(isTableExist("YO'YO")) {
-	echo "Table Exist";
-
-} else if (!isTableExist("YO'YO")){
-	if(createStockTable("YO'YO")) echo "table Created";
-
-} else {
-	echo "Failed to Check and create table";
 }
 
 

@@ -9,7 +9,7 @@ function createStockTable($symbol){
 
 global $conn;
 $table_name=$symbol;
-$query="CREATE TABLE ".$table_name." LIKE stock_general";
+$query='CREATE TABLE `'.$table_name.'` LIKE stock_general';
 
 					if($conn->query($query)== true) {
 						return true;

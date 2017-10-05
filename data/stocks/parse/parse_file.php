@@ -1,47 +1,54 @@
 <?php
-
-
 require_once ('../../../config/config.php');
-require_once ('../../../config/db_open2.php');
-require_once ('../../symbol/retrieve_symbols.php');
+require_once ('../../../config/db_open.php');
 
-function parseFile($files) {
 
-					foreach($files as $file)
-						{
-								$file_path=$dir_path.'/'.$file;
+function parseFile($file_path) {
 
-					 		if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))2) 
+
+global $conn;
+					 		if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))>0) 
 					 		{
 
 					      			// delete old data
-					      			$delete_old_rows = $conn->query("TRUNCATE TABLE symbol");
+					      			//$delete_old_rows = $conn->query("TRUNCATE TABLE symbol");
 
-									while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) 
+									while (($data = fgetcsv($handle, 2000, ",")) !== FALSE) 
 									{
-												    $no_records++;
-												    if(count($data)==5)
+											
+												    if(count($data)==15)
 												         {
 
 												            //values to be inserted in database table
 
-												            $symbol='"'.$conn->real_escape_string($data[0]).'"';
+												            $date='"'.$conn->real_escape_string($data[2]).'"';
 												            $series='"'.$conn->real_escape_string($data[1]).'"';
-												            $security='"'.$conn->real_escape_string($data[2]).'"';
-												            $band='"'.$conn->real_escape_string($data[3]).'"';
+												            $open_price='"'.$conn->real_escape_string($data[4]).'"';
+												            $high_price='"'.$conn->real_escape_string($data[5]).'"';
+
+												            $low_price='"'.$conn->real_escape_string($data[6]).'"';
+												            $last_price='"'.$conn->real_escape_string($data[7]).'"';
+												            $close_price='"'.$conn->real_escape_string($data[8]).'"';
+												            $avg_price='"'.$conn->real_escape_string($data[9]).'"';
+
+												            $total_traded_qty='"'.$conn->real_escape_string($data[10]).'"';
+												            $turnover='"'.$conn->real_escape_string($data[11]).'"';
+												            $no_of_trades='"'.$conn->real_escape_string($data[12]).'"';
+												            $deliverable_qty='"'.$conn->real_escape_string($data[13]).'"';
 
 
 												            //MySqli Insert Query
-												            $insert_row = $conn->query("INSERT INTO symbol (symbol, series, security, band) VALUES ($symbol,$series,$security,$band)");
+												          /*  $insert_row = $conn->query("INSERT INTO symbol (symbol, series, security, band) VALUES ($symbol,$series,$security,$band)");
 
 												            if($insert_row){
 												                $sym_count++;
 												            }else{
 												                die('Error : ('. $conn->errno .') '. $conn->error);
 												                $no_errors++;
-												            }
+												            }*/
 												                       
-
+												            $io_String="<br>".$date." - ".$open_price." - ".$high_price." - ".$close_price."<br>";
+												            echo $io_String;
 
 												         }
 								    
@@ -51,7 +58,18 @@ function parseFile($files) {
 					  		fclose($handle);
 						}
 
-				}
+				
 }
 
+$file_path=DWNLSTCK.'14_09_17/Syndicate Bank/1.csv';
+
+parseFile($file_path); 
+
+
+
 ?>
+
+
+
+
+
