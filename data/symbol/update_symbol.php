@@ -60,8 +60,9 @@ if (($handle = fopen($path, "r")) !== FALSE && count(file($path))>100) {
             if($insert_row){
                 $sym_count++;
             }else{
-                die('Error : ('. $conn->errno .') '. $conn->error);
+               
                 $no_errors++;
+                 die('Error : ('. $conn->errno .') '. $conn->error);
             }
                        
 
@@ -72,6 +73,7 @@ if (($handle = fopen($path, "r")) !== FALSE && count(file($path))>100) {
   }
   fclose($handle);
 }
+
 
 if($no_records==($sym_count+1)) echo "success!" ;
 

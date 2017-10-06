@@ -1,17 +1,38 @@
 <?php
-require_once ('../../../config/config.php');
-require_once ('../../../config/db_open.php');
+require ('../../../config/config.php');
+require ('../../../config/db_open.php');
+require ('is_table_exist.php');
+require ('create_stock_table.php');
 
 
-function parseFile($file_path) {
+function parseFile($symbol, $file_path) {
 
 
 global $conn;
+
+
+
+			$table_exist= is_table_exist($symbol);  // check if the table for th symbol already exist
+
+			if($table_exist) 
+				{
+
+			    } else if(!$table_exist) 
+			        {
+			        			$create_table= create_stock_table($symbol)	// Create Table for the symbol if doesn't exist already 
+					        	if(!$create_table) 
+					        		{
+					        			return false;
+					        	    }
+			    	} else {
+			    				return false;
+			    	       }
+
+
+					 		
+
 					 		if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))>0) 
 					 		{
-
-					      			// delete old data
-					      			//$delete_old_rows = $conn->query("TRUNCATE TABLE symbol");
 
 									while (($data = fgetcsv($handle, 2000, ",")) !== FALSE) 
 									{
@@ -36,19 +57,9 @@ global $conn;
 												            $no_of_trades='"'.$conn->real_escape_string($data[12]).'"';
 												            $deliverable_qty='"'.$conn->real_escape_string($data[13]).'"';
 
-
-												            //MySqli Insert Query
-												          /*  $insert_row = $conn->query("INSERT INTO symbol (symbol, series, security, band) VALUES ($symbol,$series,$security,$band)");
-
-												            if($insert_row){
-												                $sym_count++;
-												            }else{
-												                die('Error : ('. $conn->errno .') '. $conn->error);
-												                $no_errors++;
-												            }*/
 												                       
-												            $io_String="<br>".$date." - ".$open_price." - ".$high_price." - ".$close_price."<br>";
-												            echo $io_String;
+												         /*   $io_String="<br>".$date." - ".$open_price." - ".$high_price." - ".$close_price."<br>";
+												            echo $io_String;*/
 
 												         }
 								    
@@ -63,7 +74,7 @@ global $conn;
 
 $file_path=DWNLSTCK.'14_09_17/Syndicate Bank/1.csv';
 
-parseFile($file_path); 
+//parseFile($file_path); 
 
 
 

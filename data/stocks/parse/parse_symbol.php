@@ -1,12 +1,14 @@
 <?php
 
-require_once ('../../../config/config.php');
-require_once ('../../../config/db_open.php');
-require_once ('../../symbol/retrieve_symbols.php');
+require ('../../../config/config.php');
+require ('../../../config/db_open.php');
+require ('../../symbol/retrieve_symbols.php');
+
 
 function parseSymbol($symbol) 
  {
- 		$dir_path=DWNLSTCK."/19_09_17/".$symbol[3];
+
+ 		$dir_path=DWNLSTCK."/19_09_17/".$symbol;
 
 
 					$filecount = 0;
@@ -16,7 +18,7 @@ function parseSymbol($symbol)
 						 	
 							foreach ($files as $file) {
 								$file_path=$dir_path.$file;
-								parseFile($file_path); 
+								parseFile($symbol, $file_path); 
 							}
 
 						} else 

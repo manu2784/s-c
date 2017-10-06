@@ -55,7 +55,7 @@ foreach($retrieved_symbols as $record)
 
 if(is_null($download_record)) {
 
-	echo "Records not updates";
+	echo "Records not updated";
 
 } else
 {
