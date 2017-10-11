@@ -1,8 +1,8 @@
 <?php 
-$root=realpath($_SERVER["DOCUMENT_ROOT"]);
+/*$root=realpath($_SERVER["DOCUMENT_ROOT"]);
 
 require ( $root.'/config/config.php');
-require ( $root.'/config/db_open.php');
+require ( $root.'/config/db_open.php');*/
 
 
 function createStockTable($symbol){
