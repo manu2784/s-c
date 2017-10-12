@@ -1,10 +1,10 @@
 <?php ini_set('max_execution_time', 150);
 
-require_once ('../../config/config.php');
-require_once ('../../config/db_open.php');
+require_once ('../../../config/config.php');
+require_once ('../../../config/db_open.php');
 require_once ('get_all_stocks.php');
 require_once ('download_errors.php');
-require_once ('../symbol/retrieve_symbols.php');
+require_once ('../../symbol/retrieve_symbols.php');
 
 //create a dir for current update date in download folder for stocks
 $update_dir=DWNLSTCK."/".date('d_m_y');   

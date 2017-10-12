@@ -1,7 +1,7 @@
 <?php
 
-require_once ('../../config/config.php');
-require_once ('../../config/db_open.php');
+require ('../../config/config.php');
+require ('../../config/db_open.php');
 
 function retrieveSymbols($symbol="all")
 

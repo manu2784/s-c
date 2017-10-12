@@ -11,7 +11,7 @@ $symbol_record=retrieveSymbols();
 
 		foreach ($symbol_record  $symbol) 
 		{
-				//	$dir_path=DWNLSTCK."/19_09_17/".$symbol[3];
+			
 
 					parseSymbol($symbol[3]); 
 

@@ -7,35 +7,34 @@ global $conn;
 
 
 // Get the date of last row if there are existing rows in the table
-$query="SELECT MAX(date) FROM `syndibank`";
-$result= $conn->query($query) or die($conn->error);
+$query="SELECT MAX(date) FROM `$symbol`";
+$result= $conn->query($query);
 
 $row = mysqli_fetch_array($result);
+$last_record_date=0;
+if($row!=0) {
 $last_record_date=$row[0]; 
+}
 
 //First record date in the array
 $first_record_date=$stock_rows[0][0];
 
-if($last_record_date<$first_record_date)
-  {
-  	echo "dates overlap";
-  }   else {
-  	echo "continue";
 
-  	echo $last_record_date."<br>".$first_record_date;
-  }     
+if(!($last_record_date<$first_record_date))
+  {	
+  	return false;   // Error: new data overlaps with existing data
+  }      
 
-/*
+
 $query="INSERT INTO `$symbol` 
 	   (date, series, open_price, high_price, low_price, last_price, close_price, avg_price, 
 	   total_traded_qty, turnover, no_of_trades, deliverable_qty) 
        VALUES (?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-$stmt = $conn->prepare($query) or die('prepare() failed: ' . htmlspecialchars($conn->error));
+$stmt = $conn->prepare($query);
 $stmt->bind_param("isddddddidii", 
 	             $date, $series, $open_price, $high_price, $low_price, $last_price, 
-	             $close_price, $avg_price, $total_traded_qty, $turnover, $no_of_trades, $deliverable_qty)
-				 or die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+	             $close_price, $avg_price, $total_traded_qty, $turnover, $no_of_trades, $deliverable_qty);
 
 
 			foreach ($stock_rows as $row) 
@@ -57,12 +56,15 @@ $stmt->bind_param("isddddddidii",
 								$no_of_trades=$row[10];
 								$deliverable_qty=$row[11];
 
-								$stmt->execute() or die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+								$stmt->execute();
 			}
 
 $stmt->close();
 
-*/
+echo "success";
+return true;
+
+
 }
 
 

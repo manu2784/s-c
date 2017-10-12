@@ -13,35 +13,37 @@ global $conn;
 $i=0;
 $stock_rows= array();
 
-			$table_exist= isTableExist($symbol);  // check if the table for th symbol already exist
+// check if the table for th symbol already exist
+$table_exist= isTableExist($symbol);  
 
-			if($table_exist) 
-				{
+if($table_exist) 
+	{
 
-			    } else if(!$table_exist) 
-			        {
-			        			$create_table= createStockTable($symbol);	// Create Table for the symbol if doesn't exist already 
-					        	if(!$create_table) 
-					        		{
-					        			return false;
-					        	    }
-			    	} else {
-			    				return false;
-			    	       }
+	} else if(!$table_exist) 
+		{
+			$create_table= createStockTable($symbol);	// Create Table for the symbol if doesn't exist already 
+				if(!$create_table) 
+				    {
+						return false;  // Error: table can't be created
+					}
+		} else 
+			{
+			   return false;   // Error: table can't be checked
+			}
 
-
-
-			if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))>0) 
+// open CSV file, loop through the lines, and get the lines in an array
+if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))>0) 
 					 {
 
 							while (($data = fgetcsv($handle, 2000, ",")) !== FALSE) 
 								{
 
-									if($i==0) {
+									if($i==0) 
+									  {
 										$i++;
 										continue;	// if statement skips the first row which is header text
-									}
-											
+									   }
+										
 												    if(count($data)==15)
 												         {
 
@@ -68,7 +70,7 @@ $stock_rows= array();
 												            			   $turnover,$no_of_trades, $deliverable_qty];
 												                       
 
-												         }
+												         } 
 								    
 								   
 								  }
@@ -76,14 +78,22 @@ $stock_rows= array();
 					  		fclose($handle);
 					}
 
-return $stock_rows;
+if(!(count($stock_rows)>0)) 
+	{
+		return false;  // Error: empty file
+	}	
+
+persistStock($symbol, $stock_rows);
+
+
 				
 }
 
-$file_path=DWNLSTCK.'14_09_17/Syndicate Bank/1.csv';
+$file_path=DWNLSTCK.'14_09_17/Tata Steel Limited/1.csv';
 
-$t=parseFile("SYNDIBANK", $file_path); 
-persistStock("SYNDIBANK", $t);
+$t=parseFile("TATASTEEL", $file_path); 
+
+
 
 ?>
 

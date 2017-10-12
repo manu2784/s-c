@@ -1,6 +1,5 @@
 <?php 
-require_once ('../../config/config.php');
-require_once ('fetch_stock.php');
+require ('fetch_stock.php');
 
 
 function getAllStocks($symbol, $path) {
@@ -31,7 +30,7 @@ function getAllStocks($symbol, $path) {
 
 
 
-                                    if (($days_fromstart- $intervel)>90)  //headache!!!!! code for all conditions
+                                    if (($days_fromstart- $intervel)>90)  //HEADACHE!!!!! CODE FOR ALL POSSIBILITIES 
                                             {
 
                                             $intervel= $intervel + 90;
