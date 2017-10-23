@@ -1,9 +1,4 @@
 <?php
-require ('../../../config/config.php');
-require ('../../../config/db_open.php');
-require ('is_table_exist.php');
-require ('create_stock_table.php');
-require ('persist_stock.php');
 
 
 function parseFile($symbol, $file_path) {
@@ -13,23 +8,6 @@ global $conn;
 $i=0;
 $stock_rows= array();
 
-// check if the table for th symbol already exist
-$table_exist= isTableExist($symbol);  
-
-if($table_exist) 
-	{
-
-	} else if(!$table_exist) 
-		{
-			$create_table= createStockTable($symbol);	// Create Table for the symbol if doesn't exist already 
-				if(!$create_table) 
-				    {
-						return false;  // Error: table can't be created
-					}
-		} else 
-			{
-			   return false;   // Error: table can't be checked
-			}
 
 // open CSV file, loop through the lines, and get the lines in an array
 if (($handle = fopen($file_path, "r")) !== FALSE && count(file($file_path))>0) 
@@ -83,17 +61,11 @@ if(!(count($stock_rows)>0))
 		return false;  // Error: empty file
 	}	
 
-persistStock($symbol, $stock_rows);
+return $stock_rows;
 
 
 				
 }
-
-$file_path=DWNLSTCK.'14_09_17/Tata Steel Limited/1.csv';
-
-$t=parseFile("TATASTEEL", $file_path); 
-
-
 
 ?>
 

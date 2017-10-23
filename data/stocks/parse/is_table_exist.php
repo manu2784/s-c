@@ -2,15 +2,15 @@
 
 /*$root=realpath($_SERVER["DOCUMENT_ROOT"]);
 
-require ( $root.'/config/config.php');
-require ( $root.'/config/db_open.php');*/
+require ( $root.'/config/config.php');*/
+require ('../../../config/db2_open.php');
 
 
 function isTableExist($symbol){
 
-global $conn;
+global $conn2;
 $table_name=$symbol;
-$result = $conn->query("SHOW TABLES LIKE '".$table_name."'");
+$result = $conn2->query("SHOW TABLES LIKE '".$table_name."'");
 
 
     if($result->num_rows == 1) 

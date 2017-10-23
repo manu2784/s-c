@@ -35,7 +35,7 @@ if (($handle = fopen($path, "r")) !== FALSE)
               if(stripos($data[0],'Live')!==false)
               {
                    $live_BE[]=$data;
-              } else 
+              } else if (stripos($data[0],'Live')!==false)
                   {
                       $notLive_BE[]=$data;
                   }

@@ -9,7 +9,7 @@ function downloadErros($download_record, $number_symbols_used, $total_symbols) {
 						$no_data_symbols=0;							   // symbol used but no data available	
 						$error_count=0;
 						$error_content="";
-						$err_dir=ERRORLOG."/".date('d_m_y').".csv";
+						$err_dir=ERRORLOG."/stock/".date('d_m_y').".csv";
 
 
 						// Retrieving symbols for which no data exist for any time intervals in the given date range

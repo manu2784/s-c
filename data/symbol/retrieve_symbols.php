@@ -1,7 +1,5 @@
 <?php
 
-require ('../../config/config.php');
-require ('../../config/db_open.php');
 
 function retrieveSymbols($symbol="all")
 
@@ -23,7 +21,7 @@ function retrieveSymbols($symbol="all")
 		 	$retrieve_symbol[]=array($row['sym_id'], $row['symbol'],$row['series'], $row['security'], $row['band']);
 		 }
 
-	
+
 		 return $retrieve_symbol;
 	
 } 
