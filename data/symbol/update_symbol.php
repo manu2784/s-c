@@ -40,9 +40,11 @@ if (($handle = fopen($path, "r")) !== FALSE && count(file($path))>100) {
 
       // delete old data
       $delete_old_rows = $conn->query("TRUNCATE TABLE symbol");
+  $j=0;    
 
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     $no_records++;
+
     if(count($data)==5)
          {
 

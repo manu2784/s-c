@@ -20,7 +20,6 @@ function parseSymbol($symbol, $dir)
 			 			 {	
 			 			 	$parse_errors[0]=false;   // FALSE : if stock direcotry doesn't exist 
 			 			 	$parse_errors[1]=1;       // Parse error code 1
-			 			 	echo $dir_path;
 			 			 	return $parse_errors;  
 			 			 }
 

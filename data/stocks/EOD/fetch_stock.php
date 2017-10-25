@@ -1,7 +1,7 @@
 <?php // download data files from the source on the internet
 
 
-function fetchStocks($start_date, $end_date, $symbol,$path, $i) 
+function fetchStocks($symbol,$path) 
 
 {
 
@@ -20,12 +20,14 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
 
                    
 
-                    $path=$path."/".$i.".csv";
+                    $path=$path."/".$symbol.".csv";
                     if(file_exists($path)) { return array(true); }
+
                     $context = stream_context_create($opts);
                     $symCount=file_get_contents("https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );  // get the symbolCount value for the stock to be used in the next http request as a parameter
                     $symCount=(int)$symCount;
-                    $url="https://www.nseindia.com/products/dynaContent/common/productsSymbolMapping.jsp?symbol=".$symbol."&segmentLink=3&symbolCount=".$symCount."&series=ALL&dateRange=+&fromDate=".$start_date."&toDate=".$end_date."&dataType=PRICEVOLUMEDELIVERABLE";
+
+                    $url="https://www.nseindia.com/products/dynaContent/common/productsSymbolMapping.jsp?symbol=".$symbol."&segmentLink=3&symbolCount=".$symCount."&series=ALL&dateRange=day&fromDate=&toDate=&dataType=PRICEVOLUMEDELIVERABLE";
 
 
                     $content=file_get_contents( $url, false, $context );
@@ -61,5 +63,4 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                                         }
 
 }
-
 ?>

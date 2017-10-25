@@ -6,8 +6,8 @@ function isModified($conn, $sym_count) {
             $get_record = $conn->query("SELECT * FROM symbol");
             if($get_record->num_rows>0)
             	 {
-             		 if($get_record->num_rows==$sym_count){return true;} else { return flase ;}
-             	 } 	 else { return flase ;}
+             		 if($get_record->num_rows==$sym_count){return true;} else { return false ;}
+             	 } 	 else { return false ;}
    
    }
 

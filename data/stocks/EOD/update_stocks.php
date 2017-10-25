@@ -1,16 +1,16 @@
 <?php ini_set('max_execution_time', 150);
 
-require_once ('../../../config/config.php');
-require_once ('../../../config/db_open.php');
-require_once ('get_all_stocks.php');
-require_once ('download_errors.php');
-require_once ('../../symbol/retrieve_symbols.php');
+require ('../../../config/config.php');
+require ('../../../config/db_open.php');
+require ('fetch_stock.php');
+require ('download_errors.php');
+require ('../../symbol/retrieve_symbols.php');
 
 
 
 
 //create a dir for current update date in download folder for stocks
-$update_dir=DWNLSTCK."/".date('d_m_y');   
+$update_dir=DWNLEOD."/".date('d_m_y');   
 if (!file_exists($update_dir)) {
     mkdir($update_dir, 0777, true);
 }
@@ -38,20 +38,20 @@ foreach($retrieved_symbols as $record)
 		 	  	
 		 		mkdir($update_dir."/".$symbol, 0777, true);    // if duplicate symbols are found, append series to security name and create folder 
 		 		 
-		 	  }	 //else { continue; }
+		 	  }	
 
 		 	  $path=$update_dir."/".$symbol;
 
-		 	  $symbols_downloaded=getAllStocks($symbol, $path);            // call function to get all html files for a symbol
+		 	  $symbols_downloaded=fetchStocks($symbol,$path);            // call function to get all html files for a symbol
 
 		 	  if(count($symbols_downloaded)>0)                             // check for errors in getting html files
 		 	  	 {
 		 	  	 	
 		 	  	 		foreach ($symbols_downloaded as $sym) 
-		 	  	 		{
-		 	  	 			$download_record[$symbol][]=$sym;
-		 	  	 			
-		 	  	 		}
+			 	  	 		{
+			 	  	 			$download_record[$symbol][]=$sym;
+			 	  	 			
+			 	  	 		}
 
 		 	  	 }
 
