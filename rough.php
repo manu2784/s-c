@@ -1,4 +1,4 @@
 <?php
 
-echo count( glob("downloads/stocks/25_10_17/*", GLOB_ONLYDIR) );
+echo count( glob("downloads/stocks/27_10_17/*", GLOB_ONLYDIR) );
 ?>

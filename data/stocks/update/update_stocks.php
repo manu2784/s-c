@@ -19,13 +19,15 @@ if (!file_exists($update_dir)) {
 
 // error variables
 $total_symbols=0;							   // total number of symbol in the db	
-$number_symbols_used=0;						   // symbols used to download files
+$number_symbols_used=0;	
+$duplicate_sym= array();					   // symbols used to download files
 
 
 
 // Get All symbols from db & create folder for each symbol/security
 $retrieved_symbols= retrieveSymbols();
 $total_symbols=count($retrieved_symbols);
+
 
 
 // Download stock data for each stock symbol 
@@ -38,7 +40,7 @@ foreach($retrieved_symbols as $record)
 		 	  	
 		 		mkdir($update_dir."/".$symbol, 0777, true);    // if duplicate symbols are found, append series to security name and create folder 
 		 		 
-		 	  }	 //else { continue; }
+		 	  }	 else { $duplicate_sym[]=$symbol; }
 
 		 	  $path=$update_dir."/".$symbol;
 
@@ -55,7 +57,6 @@ foreach($retrieved_symbols as $record)
 
 		 	  	 }
 
-		 	  	 $number_symbols_used++;
 
 		 }
 
@@ -69,8 +70,10 @@ if(is_null($download_record))
 
 	} else
 		{
-			downloadErros($download_record, $number_symbols_used, $total_symbols);
-		}
+			downloadErros($download_record, $duplicate_sym, $total_symbols);
+		} 
+
+
 		
 
 ?>

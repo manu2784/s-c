@@ -21,7 +21,11 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                    
 
                     $path=$path."/".$i.".csv";
-                    if(file_exists($path)) { return array(true); }
+                    if(file_exists($path)) 
+                        { 
+                            return array(true); 
+                        }
+                        
                     $context = stream_context_create($opts);
                     $symCount=file_get_contents("https://www.nseindia.com/marketinfo/sym_map/symbolCount.jsp?symbol=".$symbol, false, $context );  // get the symbolCount value for the stock to be used in the next http request as a parameter
                     $symCount=(int)$symCount;
@@ -58,7 +62,7 @@ function fetchStocks($start_date, $end_date, $symbol,$path, $i)
                                             
                                           return array(true);
                                            
-                                        }
+                                        } 
 
 }
 
