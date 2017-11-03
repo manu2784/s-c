@@ -1,5 +1,5 @@
 # StatsandCharts
-php script to pull raw publicly available EOD stock data from Exchange website.
+PHP script to pull publicly available EOD raw stock data from exchange website.
 
 # Author
 Mallesh Ashnikar
